@@ -42,6 +42,7 @@ android {
     buildFeatures {
         dataBinding true
     }
+    namespace 'com.example.android.devbyteviewer'
 
 }
 
@@ -58,8 +59,8 @@ dependencies {
     implementation "androidx.core:core-ktx:$version_core"
 
     // Navigation
-    implementation "android.arch.navigation:navigation-fragment-ktx:$version_navigation"
-    implementation "android.arch.navigation:navigation-ui-ktx:$version_navigation"
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.6.0-alpha01'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.6.0-alpha01'
 
     // Coroutines for getting off the UI thread
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$version_kotlin_coroutines"
@@ -92,8 +93,8 @@ dependencies {
     kapt "androidx.room:room-compiler:$version_room"
 
     // Kotlin Extensions and Coroutines support for Room
-    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-ktx:$version_room"
 
     // WorkManager
-    implementation "android.arch.work:work-runtime-ktx:$version_work"
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
 }
