@@ -39,11 +39,24 @@ import kotlinx.coroutines.withContext
  */
 class VideosRepository(private val database: VideosDatabase) {
 
+    /**
+     * A playlist of the videos that can be shown on the screen.
+     *
+     * Transformations.map > Videos to Video
+     */
     val videos: LiveData<List<Video>> = Transformations.map(database.videoDao.getVideos()) {
+
+        // Convert from one livedata to another
+        // Database Objects >>> Domain Objects (Defined in database/DatabaseEntities.kt)
         it.asDomainModel()
+
     }
 
-    // It will be used to refresh the offline cache, while benefiting from coroutines
+    /**
+     * Refresh the videos stored in the offline cache.
+     *
+     * It will be used to refresh the offline cache, while benefiting from coroutines
+     */
     suspend fun refreshVideos() {
 
         // Run your code on the IO Dispatcher
