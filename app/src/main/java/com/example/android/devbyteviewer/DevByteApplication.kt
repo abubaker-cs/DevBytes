@@ -67,9 +67,17 @@ class DevByteApplication : Application() {
          *
          */
         val constraints = Constraints.Builder()
+
+            // Network must be UNMETERED (so the user will not be charged for the network request)
             .setRequiredNetworkType(NetworkType.UNMETERED)
+
+            // Only run when the battery is not low
             .setRequiresBatteryNotLow(true)
+
+            // Device must be charged
             .setRequiresCharging(true)
+
+            // Device must be IDLE for OS > Marshmallow v6.0
             .apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     setRequiresDeviceIdle(true)
