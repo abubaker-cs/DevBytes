@@ -35,6 +35,11 @@ import retrofit2.HttpException
 class RefreshDataWorker(appContext: Context, params: WorkerParameters) :
     CoroutineWorker(appContext, params) {
 
+    // WORK_NAME is being called in DevByteApplication.kt file
+    companion object {
+        const val WORK_NAME = "RefreshDataWorker"
+    }
+
 
     // The doWork() function now returns Result instead of Payload because they have combined Payload into Result.
     // Read more here - https://developer.android.com/jetpack/androidx/releases/work#1.0.0-alpha12

@@ -18,12 +18,23 @@
 package com.example.android.devbyteviewer
 
 import android.app.Application
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import com.example.android.devbyteviewer.work.RefreshDataWorker
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 /**
  * Override application to setup background work via WorkManager
  */
 class DevByteApplication : Application() {
+
+    //
+    val applicationScope = CoroutineScope(Dispatchers.Default)
 
     /**
      * onCreate is called before the first screen is shown to the user.
@@ -34,5 +45,45 @@ class DevByteApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
+
+        // We want to run this function in the background, before the first screen will be shown
+        delayedInit()
     }
+
+    /**
+     * We want to schedule our RefreshDataWork to run once a day
+     */
+
+    // We are using Coroutine to launch the process
+    private fun delayedInit() = applicationScope.launch {
+
+        // We are asking to run our job
+        setupRecurringWork()
+
+    }
+
+    private fun setupRecurringWork() {
+
+        // Scheduled work to run every day
+        val repeatingRequest = PeriodicWorkRequestBuilder<RefreshDataWorker>(1, TimeUnit.DAYS)
+            .build()
+
+        // Run regularly / on periodic basis
+        WorkManager.getInstance().enqueueUniquePeriodicWork(
+
+            // Unique name for this scheduled work: RefreshDataWorker
+            // We have stored this unique name in the work/RefreshDataWork.kt file
+            RefreshDataWorker.WORK_NAME, // RefreshDataWorker
+
+            // What to do when two requests of the same unique work are enqueued.
+            // We will keep the previous periodic work, which will discard the new work request.
+            ExistingPeriodicWorkPolicy.KEEP,
+
+            //
+            repeatingRequest
+        )
+
+    }
+
+
 }
