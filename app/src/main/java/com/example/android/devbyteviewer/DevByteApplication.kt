@@ -79,6 +79,7 @@ class DevByteApplication : Application() {
 
         /**
          * Scheduled work to run every day
+         * Define "conditions" under which the WorkManager will be executed:
          */
         val repeatingRequest = PeriodicWorkRequestBuilder<RefreshDataWorker>(1, TimeUnit.DAYS)
             .setConstraints(constraints)
